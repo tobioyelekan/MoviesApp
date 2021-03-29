@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MoviesApp</string>
+    <string name="label_overview">Overview</string>
+    <string name="label_status">Status</string>
+    <string name="label_budget">Budget</string>
+    <string name="revenue_label">Revenue</string>
+    <string name="label_release_date">Release Date</string>
+    <string name="label_hyphen">-</string>
+</resources>
