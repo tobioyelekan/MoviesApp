@@ -1,14 +1,23 @@
 package com.example.movies.ui.movies
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.example.movies.data.helper.Resource
 import com.example.movies.data.repo.MovieRepository
 
 class MoviesViewModel @ViewModelInject constructor(
-    repository: MovieRepository
+    private val repository: MovieRepository
 ) : ViewModel() {
 
-    val fetchMovies = repository.fetchMovies()
+    val movieLoader = liveData(context = viewModelScope.coroutineContext) {
+        emit(Resource.loading())
+        try {
+            repository.getMovies()
+            emit(Resource.success(Unit))
+        } catch (e: Throwable) {
+            emit(Resource.error(message = e.message!!))
+        }
+    }
 
     val movies = repository.observeMovies()
 }

@@ -1,9 +1,8 @@
 package com.example.movies.ui.movieDetails
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
+import com.example.movies.data.helper.Resource
 import com.example.movies.data.repo.MovieRepository
 
 class MovieDetailsViewModel @ViewModelInject constructor(
@@ -13,7 +12,15 @@ class MovieDetailsViewModel @ViewModelInject constructor(
     private val _movieId = MutableLiveData<Int>()
 
     val movieDetails = _movieId.switchMap {
-        repository.fetchMovieDetails(it)
+        liveData(context = viewModelScope.coroutineContext) {
+            emit(Resource.loading())
+            try {
+                repository.getMovieDetails(it)
+                emit(Resource.success(Unit))
+            } catch (e: Throwable) {
+                emit(Resource.error(e.message!!))
+            }
+        }
     }
 
     fun getMovieDetails(id: Int) {

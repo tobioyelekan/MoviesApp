@@ -42,7 +42,7 @@ class MoviesFragment : Fragment(R.layout.fragment_movies) {
             adapter.submitList(it)
         })
 
-        viewModel.fetchMovies.observe(viewLifecycleOwner, Observer {
+        viewModel.movieLoader.observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.LOADING -> {
                     loading.visibility = if (adapter.currentList.isEmpty()) View.VISIBLE
